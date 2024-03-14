@@ -7,9 +7,10 @@ services:
         - GID=1000
     # user: ${HOST_UID}:${HOST_GID}
     volumes:
-      - ./front:/home/node/front
+      - ./front:/home/bun/front
+    # これ、おかしいよ
     tty: true
-    working_dir: /home/node/front
+    working_dir: /home/bun/front
     ports:
       - ${BIND_IP:-127.0.0.1}:5173:5173
       - ${BIND_IP:-127.0.0.1}:5555:5555

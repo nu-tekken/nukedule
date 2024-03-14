@@ -14,11 +14,13 @@ RUN apt-get update && apt-get install -y ca-certificates curl unzip --no-install
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get clean
 
-RUN mv /root/.bun/bin/* /usr/local/bin/
+RUN cp /root/.bun/bin/bun /usr/local/bin/bun
 RUN groupadd --gid 1000 bun \
     && useradd --uid 1000 --gid bun --shell /bin/bash --create-home bun
 
 WORKDIR /home/bun
 USER bun
+
+# CMD ["bun", "run", "start"]
 # want to use distoress image with multistage build
 # FROM oven/bun:distroless  

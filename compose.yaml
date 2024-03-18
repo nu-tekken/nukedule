@@ -12,8 +12,12 @@ services:
     tty: true
     working_dir: /home/bun/front
     ports:
-      - ${BIND_IP:-127.0.0.1}:5173:5173
-      - ${BIND_IP:-127.0.0.1}:5555:5555
+      # - ${BIND_IP:-127.0.0.1}:5173:5173 # vite
+      # - ${BIND_IP:-127.0.0.1}:5555:5555 # prisma
+      # - ${BIND_IP:-127.0.0.1}:3000:3000 # svelte
+      - 5173:5173 # vite
+      - 5555:5555 # prisma
+      - 3000:3000 # svelte
   pgsql:
     restart: always
     build:

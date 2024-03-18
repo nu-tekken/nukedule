@@ -1,6 +1,9 @@
 # bookworm-slim
 FROM debian@sha256:d6a343a9b7faf367bd975cadb5c9af51874a8ecf1a2b2baa96877d578ac96722
 
+ARG GID 1000
+ARG UID 1000
+
 RUN apt-get update && apt-get install -y ca-certificates curl unzip --no-install-recommends \
     && curl -fsSL https://bun.sh/install | bash \
     && apt-mark auto '.*' > /dev/null \
@@ -14,13 +17,15 @@ RUN apt-get update && apt-get install -y ca-certificates curl unzip --no-install
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get clean
 
-RUN cp /root/.bun/bin/bun /usr/local/bin/bun
-RUN groupadd --gid 1000 bun \
-    && useradd --uid 1000 --gid bun --shell /bin/bash --create-home bun
+RUN cp /root/.bun/bin/bun /usr/local/bin/bun && \
+    groupadd --gid $GID bun \
+    && useradd --uid $UID --gid bun --shell /bin/bash --create-home bun \
+    && chown bun:bun /usr/local/bin/bun
 
-WORKDIR /home/bun
 USER bun
-
-# CMD ["bun", "run", "start"]
+WORKDIR /home/bun/front
+# COPYが必要なのか。
+# RUN cd /home/bun/front && bun install --frozen-lockfile
+# CMD ["bun","run", "./build/index.js"]
 # want to use distoress image with multistage build
 # FROM oven/bun:distroless  
